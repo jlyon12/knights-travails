@@ -6,7 +6,20 @@ const chessBoard = new Board(8).board;
 const knightMoves = ([x1, y1], [x2, y2]) => {
 	const startPos = [x1, y1];
 	const endPos = [x2, y2];
-
+	if (
+		x1 > 8 ||
+		y1 > 8 ||
+		x2 > 8 ||
+		y2 > 8 ||
+		x1 < 1 ||
+		y1 < 1 ||
+		x2 < 1 ||
+		y2 < 1
+	) {
+		throw new Error(
+			'A Chessboard is 8x8. Please check your starting position and ending position'
+		);
+	}
 	const potentialDirections = [
 		[1, 2],
 		[2, 1],
@@ -21,20 +34,21 @@ const knightMoves = ([x1, y1], [x2, y2]) => {
 	const queue = [[startPos, 0]];
 	// create a map with key = current position , value = previous position
 	const searched = new Map([[String(startPos), null]]);
-	// initialize array with end position to push shortest path to
-	const path = [[String(endPos)]];
+	const path = [];
 	while (queue.length) {
 		let [currentPosition, distance] = queue.shift();
 
 		if (String(currentPosition) === String(endPos)) {
 			// when shortest path is found backtrace the path using the current position/end position by using the seached map
-			for (let i = distance; i <= distance + 1; i += 1) {
+			while (currentPosition !== null) {
 				const temp = searched.get(String(currentPosition));
-				path.unshift([temp]);
+				path.unshift(currentPosition);
 				currentPosition = temp;
 			}
 
-			return { distance, path };
+			const pathOutput = JSON.stringify(path);
+
+			return `The Knight has moved from [${startPos}] to [${endPos}] in ${distance} moves. \nPath: ${pathOutput}`;
 		}
 		for (const direction of potentialDirections) {
 			const potentialNextPosition = [
@@ -51,6 +65,21 @@ const knightMoves = ([x1, y1], [x2, y2]) => {
 			}
 		}
 	}
+	return -1;
 };
+console.log(knightMoves([1, 1], [1, 1]));
+// Expect 0
 
-knightMoves([1, 1], [1, 5]);
+console.log(knightMoves([1, 1], [2, 3]));
+// Expect 1
+
+console.log(knightMoves([1, 1], [3, 6]));
+// Expect 2
+
+console.log(knightMoves([1, 1], [8, 8]));
+// Expect 6
+
+console.log(knightMoves([1, 1], [10, 8]));
+// Expect Error
+
+export default knightMoves;
