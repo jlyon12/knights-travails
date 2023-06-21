@@ -42,10 +42,9 @@ const knightMoves = ([x1, y1], [x2, y2]) => {
 			// when shortest path is found backtrace the path using the current position/end position by using the seached map
 			while (currentPosition !== null) {
 				const temp = searched.get(String(currentPosition));
-				path.unshift(currentPosition);
+				path.unshift([String(currentPosition)]);
 				currentPosition = temp;
 			}
-
 			const pathOutput = JSON.stringify(path);
 
 			return `The Knight has moved from [${startPos}] to [${endPos}] in ${distance} moves. \nPath: ${pathOutput}`;
@@ -67,19 +66,5 @@ const knightMoves = ([x1, y1], [x2, y2]) => {
 	}
 	return -1;
 };
-console.log(knightMoves([1, 1], [1, 1]));
-// Expect 0
-
-console.log(knightMoves([1, 1], [2, 3]));
-// Expect 1
-
-console.log(knightMoves([1, 1], [3, 6]));
-// Expect 2
-
-console.log(knightMoves([1, 1], [8, 8]));
-// Expect 6
-
-console.log(knightMoves([1, 1], [10, 8]));
-// Expect Error
 
 export default knightMoves;
