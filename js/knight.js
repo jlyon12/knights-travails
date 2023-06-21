@@ -19,19 +19,19 @@ const knightMoves = ([x1, y1], [x2, y2]) => {
 	];
 
 	const queue = [[startPos, 0]];
-	const searched = new Map();
-	searched.set(startPos, null);
-	let path = [[String(endPos)]];
+	// create a map with key = current position , value = previous position
+	const searched = new Map([[String(startPos), null]]);
+	// initialize array with end position to push shortest path to
+	const path = [[String(endPos)]];
 	while (queue.length) {
-		const [currentPosition, distance] = queue.shift();
+		let [currentPosition, distance] = queue.shift();
 
 		if (String(currentPosition) === String(endPos)) {
-			let current = endPos;
-			while (String(current) !== String(startPos)) {
-				let temp = searched.get(String(current));
-				path.unshift([searched.get(String(current))]);
-				current = temp;
-				path;
+			// when shortest path is found backtrace the path using the current position/end position by using the seached map
+			for (let i = distance; i <= distance + 1; i += 1) {
+				const temp = searched.get(String(currentPosition));
+				path.unshift([temp]);
+				currentPosition = temp;
 			}
 
 			return { distance, path };
